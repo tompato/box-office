@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Box Office{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Book tickets</h1>
+</div>
+<div class="body">
+  {% if tickets|length > 0 %}
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>Event</th>
+        <th>Showing</th>
+        <th>Type</th>
+        <th>Expires</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for ticket in tickets %}
+      <tr>
+        <td>{{ ticket.showing.event.name }}</td>
+        <td>{{ moment(ticket.showing.date).calendar() }}</td>
+        <td>{{ ticket.ticket_type.name }}</td>
+        <td>{{ moment(ticket.expiry).fromTime(current_time) }}</td>
+        <td>{{ '£%0.2f'|format(ticket.ticket_type.price) }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

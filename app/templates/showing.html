@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Box Office{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>{{ showing.event.name }} <small>{{ showing.tickets_available() }} tickets remaining</small></h1>
+</div>
+<div class="body">
+  {{ showing.event.body }}
+  <form  action class="form" method="post" role="form">
+    {{ form.hidden_tag() }}
+    {% for subfield in form.tickets %}
+    <div class="subform">
+      {{ subfield.form.hidden_tag() }}
+      {{ wtf.form_field(subfield.form.num_tickets) }}
+    </div>
+    {% endfor %}
+    {{ wtf.form_field(form.submit) }}
+  </form>
+  <h2>Booked Tickets</h2>
+  {% for booking in bookings %}
+  <div class="panel panel-default">
+    <div class="panel-heading">Booking: #{{ booking.id }} <div class="pull-right"><a href="{{ url_for('.edit_booking', id=booking.id) }}" class="btn btn-primary" role="button">Edit</a></div></div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Type</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      {% for ticket in booking.tickets %}
+      {% if ticket.showing_id == showing.id %}
+        <tr>
+          <td>{{ ticket.id }} - {{ ticket.booking.name }}</td>
+          <td>{{ ticket.booking.email }}</td>
+          <td>{{ ticket.ticket_type.name }}</td>
+          <td>{{ '£%0.2f'|format(ticket.ticket_type.price) }}</td>
+        </tr>
+      {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Box Office{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Edit booking</h1>
+</div>
+<div class="body">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Booking: #{{ booking.id }}
+      <div class="pull-right">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Actions
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="{{ url_for('.edit_booking', id=booking.id) }}">Mark all paid</a></li>
+            <li><a href="{{ url_for('.edit_booking', id=booking.id) }}">Edit</a></li>
+            <li><a href="{{ url_for('.edit_booking', id=booking.id) }}">Delete</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="panel-body">
+      <ul>
+        <li>{{ booking.name }}</li>
+        <li>{{ booking.email }}</li>
+        <li>{{ moment(booking.date_created).format('MMMM Do YYYY, h:mm:ss a') }}</li>
+      </ul>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Showing</th>
+          <th>Ticket ID</th>
+          <th>Type</th>
+          <th>Price</th>
+          <th>Paid</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for ticket in tickets %}
+        <tr>
+          <td>{{ ticket.showing.event.name }} on <em>{{ moment(ticket.showing.date).format('MMMM Do YYYY, h:mm:ss a') }}</em></td>
+          <td>{{ ticket.id }}</td>
+          <td>{{ ticket.ticket_type.name }}</td>
+          <td>{{ '£%0.2f'|format(ticket.ticket_type.price) }}</td>
+          <td><span class="label label-{% if ticket.paid %}success{% else %}danger{% endif %}">{{ 'Yes' if ticket.paid else 'No' }}</span></td>
+          <td>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Actions
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                {% if ticket.paid %}
+                <li><a href="#">Mark as not paid</a></li>
+                {% else %}
+                <li><a href="#">Mark as paid</a></li>
+                {% endif %}
+                <li><a href="#">Delete</a></li>
+              </ul>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

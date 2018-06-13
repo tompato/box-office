@@ -1,0 +1,16 @@
+Dear {{ booking.name }},
+
+Thank you for your booking
+
+Booking ref: {{ booking.booking_ref }}
+
+====================================
+{% for ticket in tickets %}
+  {{ ticket.showing.event.name }} -- {{ ticket.showing.date }}
+{% endfor %}
+====================================
+
+Sincerely,
+Box Office
+
+Note: replies to this email address are not monitored.

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Box Office{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>Upcoming Events</h1>
+</div>
+{% for showing in showings %}
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">{{ showing.event.name }} <em>{{ moment(showing.date).fromNow() }}</em></h3>
+    <span class="badge">{{ showing.tickets_available() }}</span> tickets available
+  </div>
+  <div class="panel-body">
+    {{ showing.event.body }}
+    <p><a href="{{ url_for('.showing', id=showing.id) }}" class="btn btn-primary" role="button">Book</a></p>
+  </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Box Office{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>My Bookings</h1>
+</div>
+<div class="body">
+  {% for booking in bookings %}
+  <div class="panel panel-default">
+    <div class="panel-heading"><h3 class="panel-title">{{ booking.booking_ref }}</h3> {{ moment(booking.date_created).format('MMMM Do YYYY, h:mm:ss a') }}</div>
+    <table class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th class="col-md-5">Event</th>
+          <th class="col-md-3">Showing</th>
+          <th class="col-md-2">Type</th>
+          <th class="col-md-1">Price</th>
+          <th class="col-md-1">Paid</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for ticket in booking.tickets %}
+        <tr>
+          <td>{{ ticket.showing.event.name }}</td>
+          <td>{{ moment(ticket.showing.date).calendar() }}</td>
+          <td>{{ ticket.ticket_type.name }}</td>
+          <td>{{ '£%0.2f'|format(ticket.ticket_type.price) }}</td>
+          <td><span class="label label-{% if ticket.paid %}success{% else %}danger{% endif %}">{{ ticket.paid }}</span></td>
+        </tr>
+      {% endfor %}
+        <tr><td colspan="5">&nbsp;</td></tr>
+        <tr>
+          <th colspan="3">Total</th>
+          <td>{{ '£%0.2f'|format(booking.total_cost()) }}</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

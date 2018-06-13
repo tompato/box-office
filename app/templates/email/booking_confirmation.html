@@ -1,0 +1,22 @@
+<p>Dear {{ booking.name }},</p>
+<p>Thank you for your booking</p>
+<p>Booking ref: {{ booking.booking_ref }}</p>
+<table>
+  <thead>
+    <tr>
+      <th>Event</th>
+      <th>Showing</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for ticket in tickets %}
+    <tr>
+      <td>{{ ticket.showing.event.name }}</td>
+      <td>{{ ticket.showing.date }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+<p>Sincerely,</p>
+<p>Box Office</p>
+<p><small>Note: replies to this email address are not monitored.</small></p>
